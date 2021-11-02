@@ -1,0 +1,302 @@
+% !TeX root = kexam.tex
+% !TeX encoding = UTF-8
+
+
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+
+
+%\newif\if@kelandscape \@kelandscapefalse %%横向
+%\DeclareOption{landscape}{\@kelandscapetrue}
+%\newif\if@kenonseal \@kenonsealfalse %%不密封
+%\DeclareOption{nonseal}{\@kenonsealtrue}
+%%\newif\if@kewindows \@kewindowsfalse %%Windows
+%%\DeclareOption{windows}{\@kewindowstrue}
+%%\newif\if@keubuntu \@keubuntufalse %%Ubuntu
+%%\DeclareOption{ubuntu}{\@keubuntutrue}
+%%\newif\if@kefonts \@kefontsfalse %%Kefonts
+%%\DeclareOption{kefonts}{\@kefontstrue}
+%%\newif\if@keformal \@keformalfalse %%formal, offical 正式的，包含题首阅卷人 但是中学试卷一般不用
+%%\DeclareOption{formal}{\@keformaltrue}
+%\OptionNotUsed
+%\ProcessOptions
+
+\ProvidesPackage{ssmath}[2021/11/03 v0.1 Some Secondary School Mathematics symbols Package]
+%\begin{filecontents*}{\jobname.aux}
+%	\relax
+%	\newlabel{lastcolno}{{}{1}}
+%	\newlabel{dblastcolno}{{}{1}}
+%\end{filecontents*}
+
+\RequirePackageWithOptions{xeCJK}
+
+\xeCJKsetup{CJKmath} %%使用此设置可以使得在数学环境中直接输入中文, 而省掉 \text
+
+%\RequirePackage[bookmarks=true]{hyperref}
+%\RequirePackage{amsmath,amssymb}%
+%\RequirePackage{graphicx}
+
+\RequirePackage{tikz}
+	\usetikzlibrary{3d, calc, intersections, shapes, positioning, angles} %%, math
+	\usetikzlibrary{patterns} %%使用已经定义好的阴影线  P731 -- 2021
+	\usetikzlibrary{patterns.meta} %%自定义阴影线
+	\tikzset{otmm/.style={x={(-140:0.5cm)},y={(0:1cm)},z={(90:1cm)}}} %%斜二映射法 斜二测画法 oblique two mapping method
+	\tikzset{every picture/.style = {>=stealth}} %%每一个图的箭头统一风格
+\RequirePackage{pgfplots}
+
+%\RequirePackage{calc}
+%\RequirePackage{refcount} %%根据 label 的位置返回页码基数格式
+\RequirePackage{ifthen}
+%\RequirePackage[numbers]{natbib}
+%\RequirePackage{multibib}
+%	\let\sectionoriginal\section
+%	\renewcommand*{\section}[2]{}  %%设置使不显示参考文献类型名称, 取消会出现 choosing test 之类
+%\RequirePackage{answers}  %%用于自动生成答案文件
+%	\Newassociation{sol}{Solution}{ans}
+%	\renewcommand{\Solutionlabel}[1]{{\small #1}.\hspace{-0.3em}} %%根据单双栏略作修改
+%\RequirePackage{multicol} %%多栏
+%\RequirePackage{multirow} %合并合并表格的多行
+\RequirePackage[Symbol]{upgreek}
+
+%\RequirePackage{enumitem} %%与 enumerate package 二选一
+%\setlist[enumerate, 1]{nosep, itemindent=\parindent, label=(\arabic*), leftmargin=0pt, start=1}
+%\setlist[enumerate, 2]{nosep, itemindent=\parindent+1.5em, label=(\roman*), leftmargin=0pt, start=1} %% format=\resizebox{1.5em}{\height},
+
+%\RequirePackage{tasks} %%需要2020版及以后的tasks宏包
+%\settasks{
+%	label = \Alph*.,
+%	item-indent = 1.4\ccwd ,
+%	before-skip = -1.5ex plus 0.5ex minus 0.5ex,
+%	after-skip = -1.5ex plus 0.5ex minus 0.5ex,
+%	after-item-skip = -1ex plus 0.5ex minus 0ex,
+%	%	label-width = 2em ,
+%	%	label-offset = 0pt
+%}
+
+
+%\zihao{-4}
+%\setlength\parskip{0pt} %%修改 0pt plus 1pt 为 0pt
+
+\RequirePackage{xstring}
+
+%\newcommand*{\circled}[1]{% 理论上支持没上限, 但建议最大两位数
+%	\StrLen{#1}[\lengthfornumber]% %%计算 #1 的长度并将其赋值给 lengthforvector, 需要 xstring package
+%	\ifnum\lengthfornumber=0% 从 0 开始考虑 lengthfornumber 的位数
+%	\raisebox{0.125ex}{\textcircled{~}}\else \ifnum\lengthfornumber<3 \raisebox{0.125ex}{\textcircled{\raisebox{-0.25ex}{\resizebox{0.5em}{\height}{#1}}}}\else \raisebox{0.125ex}{\textcircled{\raisebox{-0.25ex}{\resizebox{0.5em}{\height}{#1}}}}\@latex@warning{Better use less than 100 in \circled{}.}%
+%	\fi\fi} %%使用 graphicx 提供的 \scalebox 实现两位数字的横向压缩
+
+%\newcommand*{\circled}[1]{% 最大支持 999
+%	\StrLen{#1}[\lengthfornumber]% %%计算 #1 的长度并将其赋值给 lengthforvector, 需要 xstring package
+%	\ifcase\lengthfornumber% 从 0 开始考虑 lengthfornumber 的位数
+%	\relax\or \textcircled{\footnotesize \raisebox{-0.08ex}{#1}}\or \textcircled{\scriptsize \raisebox{-0.08ex}{\scalebox{0.85}[1]{#1}}}\or \textcircled{\scriptsize \raisebox{-0.08ex}{\scalebox{0.6}[1]{#1}}}\else ???\@latex@warning{Only use not more than 1000 in \circled.}%
+%	\fi} %%使用 graphicx 提供的 \scalebox 实现两位数字的横向压缩
+
+%%流程图的各种符号
+%\tikzstyle{inout}=[trapezium, trapezium left angle=60, trapezium right angle=120, draw] %%输入输出框
+%\tikzstyle{end}=[rectangle, rounded corners, draw]   %%教材上的起止框
+%\tikzstyle{endn}=[rounded rectangle, draw]   %%新版的起止框
+%\tikzstyle{exec}=[rectangle, draw]    %%执行框 execute
+%\tikzstyle{decide}=[kite, kite vertex angles=120, draw]   %%判断框
+
+\tikzstyle{inout}=[trapezium, trapezium left angle=60, trapezium right angle=120, draw] %输入输出框
+\tikzstyle{term}=[rectangle, rounded corners, draw]   %教材上的起止框
+%\tikzstyle{term}=[rounded rectangle, draw]   %新版的起止框 Terminal
+\tikzstyle{proc}=[rectangle, draw]    %执行框 Process execute
+\tikzstyle{decs}=[kite, kite vertex angles=120, draw]   %判断框 Decision
+
+\RequirePackage{mathtools}
+\let\underbracketML\underbracket
+\let\overbracketML\overbracket
+\let\dblcolonML\dblcolon
+\let\coloneqqML\coloneqq
+\let\ColoneqqML\Coloneqq
+\let\eqqcolonML\eqqcolon
+\RequirePackage{xargs} %% 提供 \newcommandx
+\RequirePackage{unicode-math} %%unicode-math 定义了很多符号, texdoc unimath-symbols
+
+\renewcommand{\frac}[2]{\genfrac{}{}{}{}{\, #1 \,}{\, #2 \,}}   %重新定义分数
+\renewcommand{\dfrac}[2]{\genfrac{}{}{}{0}{\, #1 \,}{\, #2 \,}}  %%不建议使用dfrac, 用frac的自适应
+
+%\RequirePackage{xfrac}%%使用 sfrac 斜分数
+
+\RequirePackage{esvect} %%%%\vv > \vec or $\overrightarrow{}$
+
+\let\vector\vec %%使用 vector 保留原始的 vec 定义, 即手写体 (用 def 或者 newcommand 没成功)
+
+\AtBeginDocument{
+	\renewcommand\parallel{\mathrel{/\mskip-2.5mu/}}
+	
+	\renewcommand*{\vec}[1]{%
+		\IfInteger{#1}{\symbf{#1}}%% 若为数字, 只加粗不倾斜
+		{\StrLen{#1}[\lengthforvector]% %%计算 #1 的长度并将其赋值给 lengthforvector, 需要 xstring package
+			\ifnum \lengthforvector=1%
+			\symbfit{#1}%
+			\else%
+			\ifnum \lengthforvector=2\vv{#1}\else\vv{#1}\@latex@warning{Please determine the length of string!}\fi\fi}}%%使用 unicode-math 提供的 \symbfit 实现更改数学字体后的粗斜体
+}
+%\renewcommand\parallel{\mathrel{/\mskip-2.5mu/}} %%由于 unicode-math 的符号在 atbegindocument 引入, 因此若要重定义之中的的符号, 得在 \AtBeginDocument 或正文修改修改 谢谢 纸鸢 和 sikouhjw 的指导.
+
+%\RequirePackage{yhmath}    %用弧ABC=\wideparen{ABC}，位置要放在靠后，用 unicode-math 提供的 \overparen
+
+% just to make sure it exists
+\providecommand\given{}
+% can be useful to refer to this outside \Set
+\newcommand\SetSymbol[1][]{%
+	\nonscript\:#1\vert
+	\allowbreak
+	\nonscript\:
+	\mathopen{}}
+\DeclarePairedDelimiterX\Set[2]\{\}{%
+	#1
+	\renewcommand\given{\SetSymbol[\delimsize]}\given
+	#2
+}
+\newcommand\set[2][x]{\Set*{#1}{#2}}
+
+\DeclarePairedDelimiter\magn{\lvert}{\rvert} %%magnitude of vector or complex number
+\DeclarePairedDelimiter\abs{\lvert}{\rvert} %%absolute of real number
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+
+\newcommand\plane{平面~} %% 方便在立体几何中输入, 在加入了 xeCJKsetup{CJKmath} 后可以去掉 \text, 但为了输入省事, 还是再用 plane
+
+\newcommandx\seq[3][1=x,2=n,3=1,usedefault]{#1_{#3},\dots,#1_{#2}} %%sequence
+
+\newcommandx\elp[3][1=a^2,2=b^2,3=x,usedefault]{% %%%%定义椭圆标准方程 ellipse
+	\ifx #3x \frac{x^2}{#1} + \frac{y^2}{#2}=1\else\ifx #3y \frac{y^2}{#1} + \frac{x^2}{#2}=1\else ???\@latex@warning{Only use default x or y in third parameter of \elp.}\fi\fi}
+
+\newcommandx\hypb[3][1=a^2,2=b^2,3=x,usedefault]{% %%定义双曲线标准方程 hyperbola
+	\ifx #3x \frac{x^2}{#1} - \frac{y^2}{#2}=1\else\ifx #3y \frac{y^2}{#1} - \frac{x^2}{#2}=1\else ???\@latex@warning{Only use default x or y in third parameter of \hypb.}\fi\fi}
+
+%% 用 TikZ 标记线段AB长度, 需要 calc 库, TikZ leble segment length, require calc library
+%%#1 0.25cm default, #2 A, #3 B, #4 2.5cm (length of segment),  #5 0.2cm shift length, #6 rotate angle from AB not BA 90
+\newcommand\tikzlabseglen[6][0.25cm]{%
+	\coordinate (tempa) at ($ (#2)!{#5}!#6:(#3) $);
+	\coordinate (tempb) at ($ (#3)!{#5}!-#6:(#2) $);
+	\node (mtempab) at ($ (tempa)!0.5!(tempb) $) {$#4$};
+	\draw ($ (#2)!{#5-#1/2}!#6:(#3) $) -- ($ (#2)!{#5+#1/2}!#6:(#3) $)
+	($ (#3)!{#5-#1/2}!-{#6}:(#2) $) -- ($ (#3)!{#5+#1/2}!-{#6}:(#2) $);
+	\draw [->] (mtempab) -- (tempa);
+	\draw [->] (mtempab) -- (tempb);
+}
+
+%%新定义几个凹凸增减箭头
+\newcommand\concaveuparrow[1][1]{\ensuremath{\mathop{\text{\tikz[baseline,xscale=#1]\draw[-stealth] (0em,-.1em) to [out=75, in=195] (.8em,.612em);}}}}
+\newcommand\convexuparrow[1][1]{\ensuremath{\mathop{\text{\tikz[baseline,xscale=#1]\draw[-stealth] (0em,-.1em) to [out=10, in=-105] (.8em,.612em);}}}}
+\newcommand\concavedownarrow[1][1]{\ensuremath{\mathop{\text{\tikz[baseline,xscale=#1]\draw[-stealth] (0em,.612em) to [out=-10, in=105] (.8em,-.1em);}}}}
+\newcommand\convexdownarrow[1][1]{\ensuremath{\mathop{\text{\tikz[baseline,xscale=#1]\draw[-stealth] (0em,.612em) to [out=-75, in=165] (.8em,-.1em);}}}}
+
+
+\DeclareMathOperator*{\df}{d\!} 
+\newcommand{\dx}[1][x]{\df #1}
+
+%%%https://zhuanlan.zhihu.com/p/413407561?utm_source=qq&utm_medium=social&utm_oi=41958084968448
+%%differentiation
+\def\dif{\mathop{}\hphantom{\mskip-\thinmuskip}\mathrm{d}}%
+\let\daccent\d
+\let\d\relax
+\newcommand\d{\ifmmode\dif\else\expandafter\daccent\fi}
+%%%%%%%%%通过重定义数学环境中的 \d 使得 \d 在文本中保留原定义, 而在数学环境中为微分算子
+
+\newcommand*{\im}{%  %定义虚数单位 i
+	\mathord{\symup{i}}%
+}
+
+\newcommand*{\e}{%   %定义自然对数的底 e
+	\mathord{\symup{e}}%
+}
+
+\newcommand*{\setn}{%   %定义自然数集 N, set of natural numbers
+	\mathord{\symbf{N}}%
+}
+
+\newcommand*{\setz}{%   %定义整数集 Z (German: Zahlen), set of integers
+	\mathord{\symbf{Z}}%
+}
+
+\newcommand*{\setq}{%   %定义有理数集 Q (quotient), set of rational numbers
+	\mathord{\symbf{Q}}%
+}
+
+\newcommand*{\setr}{%   %定义实数集 R, set of real numbers
+	\mathord{\symbf{R}}%
+}
+
+\newcommand*{\setc}{%   %定义复数集 C, set of complex numbers
+	\mathord{\symbf{C}}%
+}
+
+\providecommand*{\ang}{%    %jiaodu
+	\mathord{^{\circ}}%
+}
+
+\providecommand*{\angc}{%    %sheshidu
+	\mathord{^{\circ}\symup{C}}%
+}
+
+%%%利用 tikz 画出综合度与难度
+%\newcommand*\showcomplexity[1]{%
+%	\ifnum #1=0%
+%	\raisebox{-0.45ex}{\begin{tikzpicture}[scale=0.1224]
+%			\foreach \j in {-1,0,1}
+%			{
+%				\draw (45*\j:{1+(1+(-1)^(\j))*(sqrt(2)-1)/2})++(0,{sqrt(2)/2}) -- ++(225:1) -- ++(-45:1) -- ++(45:1) -- ++(135:1);
+%			}
+%	\end{tikzpicture}}%
+%	\else%
+%	\pgfmathparse{int(Mod(#1,3))}%
+%	\ifcase\pgfmathresult%
+%	\raisebox{-0.45ex}{\begin{tikzpicture}[scale=0.1224]
+%			\filldraw ({45*(ceil(#1/3)-2)}:{1+(1+(-1)^(ceil(#1/3)))*(sqrt(2)-1)/2})++(0,{sqrt(2)/2}) -- ++(225:1) -- ++(-45:1) -- ++(45:1) -- ++(135:1);
+%			\foreach \j in {-1,0,1}
+%			{
+%				\draw (45*\j:{1+(1+(-1)^(\j))*(sqrt(2)-1)/2})++(0,{sqrt(2)/2}) -- ++(225:1) -- ++(-45:1) -- ++(45:1) -- ++(135:1);
+%			}
+%	\end{tikzpicture}}\or%
+%	\raisebox{-0.45ex}{\begin{tikzpicture}[scale=0.1224]
+%			\filldraw[fill=lightgray] ({45*(ceil(#1/3)-2)}:{1+(1+(-1)^(ceil(#1/3)))*(sqrt(2)-1)/2})++(0,{sqrt(2)/2}) -- ++(225:1) -- ++(-45:1) -- ++(45:1) -- ++(135:1);
+%			\foreach \j in {-1,0,1}
+%			{
+%				\draw (45*\j:{1+(1+(-1)^(\j))*(sqrt(2)-1)/2})++(0,{sqrt(2)/2}) -- ++(225:1) -- ++(-45:1) -- ++(45:1) -- ++(135:1);
+%			}
+%	\end{tikzpicture}}\else%
+%	\raisebox{-0.45ex}{\begin{tikzpicture}[scale=0.1224]
+%			\filldraw[fill=gray] ({45*(ceil(#1/3)-2)}:{1+(1+(-1)^(ceil(#1/3)))*(sqrt(2)-1)/2})++(0,{sqrt(2)/2}) -- ++(225:1) -- ++(-45:1) -- ++(45:1) -- ++(135:1);
+%			\foreach \j in {-1,0,1}
+%			{
+%				\draw (45*\j:{1+(1+(-1)^(\j))*(sqrt(2)-1)/2})++(0,{sqrt(2)/2}) -- ++(225:1) -- ++(-45:1) -- ++(45:1) -- ++(135:1);
+%			}
+%	\end{tikzpicture}}%
+%	\fi%
+%	\fi%%blank
+%}
+%\newcommand*\showdifficulty[1]{%
+%	\raisebox{-0.45ex}{\begin{tikzpicture}[scale=0.1224]
+%			\begin{scope}
+%				\clip (-1.5,-1.5) rectangle (9*1.5-#1*15,1.5);
+%				\foreach \i in {0,1,2,3,4}
+%				{
+%					\fill[xshift=3*\i cm] (90-72:1) -- (90+72:1) -- (90-144:1) -- (90:1) -- (90+144:1) -- cycle;
+%					\foreach \j in {0,1,...,4}
+%					{
+%						\draw[xshift=3*\i cm] (18+72*\j:1) -- (18+72*\j:1.5) -- (90+72*\j:1.5);
+%					}
+%				}
+%			\end{scope}
+%			\begin{scope}
+%				\clip (9*1.5-#1*15,-1.5) rectangle (9*1.5,1.5);
+%				\foreach \i in {0,1,2,3,4}
+%				{
+%					\filldraw[help lines,fill=white,xshift=3*\i cm] (90-72:1) -- (90+72:1) -- (90-144:1) -- (90:1) -- (90+144:1) -- cycle;
+%					\foreach \j in {0,1,...,4}
+%					{
+%						\draw[help lines,xshift=3*\i cm] (18+72*\j:1) -- (18+72*\j:1.5) -- (90+72*\j:1.5);
+%					}
+%				}
+%			\end{scope}
+%	\end{tikzpicture}}%blank
+%}
+%\AtEndDocument{\label{TotalPages}} %%结尾加一个标签用于计算页数, 但放在这里似乎不妥, 应该对于试卷和答案区分一下, 或者只考虑计算试题的页数
+
+
+
+\endinput
