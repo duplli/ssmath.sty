@@ -36,7 +36,7 @@
 %\RequirePackage{graphicx}
 
 \RequirePackage{tikz}
-	\usetikzlibrary{3d, calc, intersections, shapes, positioning, angles} %%, math
+	\usetikzlibrary{3d, calc, intersections, shapes, positioning, angles,quotes} %%, math
 	\usetikzlibrary{patterns} %%使用已经定义好的阴影线  P731 -- 2021
 	\usetikzlibrary{patterns.meta} %%自定义阴影线
 	\tikzset{otmm/.style={x={(-140:0.5cm)},y={(0:1cm)},z={(90:1cm)}}} %%斜二映射法 斜二测画法 oblique two mapping method
@@ -55,7 +55,7 @@
 %	\renewcommand{\Solutionlabel}[1]{{\small #1}.\hspace{-0.3em}} %%根据单双栏略作修改
 %\RequirePackage{multicol} %%多栏
 %\RequirePackage{multirow} %合并合并表格的多行
-\RequirePackage[Symbol]{upgreek}
+%\RequirePackage[Symbol]{upgreek} %%使用unicode-math之后可以不用这个
 
 %\RequirePackage{enumitem} %%与 enumerate package 二选一
 %\setlist[enumerate, 1]{nosep, itemindent=\parindent, label=(\arabic*), leftmargin=0pt, start=1}
@@ -116,7 +116,15 @@
 \renewcommand{\frac}[2]{\genfrac{}{}{}{}{\, #1 \,}{\, #2 \,}}   %重新定义分数
 \renewcommand{\dfrac}[2]{\genfrac{}{}{}{0}{\, #1 \,}{\, #2 \,}}  %%不建议使用dfrac, 用frac的自适应
 
-%\RequirePackage{xfrac}%%使用 sfrac 斜分数
+%\RequirePackage{xfrac}%%使用 sfrac 斜分数, 但分子分母是上下标大小
+%%自己定义的斜分数, 分子分母都是正常大小
+\newcommand\sfrac[2]{%
+	\mathchoice%
+	{\mathord{\mkern-2mu\left.\lower-0.5ex\hbox{$#1$}\mkern-3mu\middle/\mkern-3mu\lower.5ex\hbox{$#2$}\right.\mkern-2mu}}%
+	{\mathord{\mkern-2mu\left.\lower-0.5ex\hbox{$#1$}\mkern-3mu\middle/\mkern-3mu\lower.5ex\hbox{$#2$}\right.\mkern-2mu}}%
+	{\mathord{\mkern-3mu\left.\lower-0.5ex\hbox{$\scriptstyle #1$}\mkern-3mu\middle/\mkern-3mu\lower.5ex\hbox{$\scriptstyle #2$}\right.\mkern-2.65mu}}%
+	{\mathord{\mkern-3mu\left.\lower-0.5ex\hbox{$\scriptscriptstyle #1$}\mkern-3mu\middle/\mkern-3mu\lower.5ex\hbox{$\scriptscriptstyle #2$}\right.\mkern-2.65mu}}%
+}
 
 \RequirePackage{esvect} %%%%\vv > \vec or $\overrightarrow{}$
 
@@ -224,6 +232,10 @@
 \newcommand*{\setc}{%   %定义复数集 C, set of complex numbers
 	\mathord{\symbf{C}}%
 }
+
+%%参考 gensymb 定义的俩度符号
+\renewcommand\deg{\ensuremath{\text{\textdegree}}}
+\newcommand\degc{\ensuremath{\text{\textcelsius}}}
 
 \providecommand*{\ang}{%    %jiaodu
 	\mathord{^{\circ}}%
