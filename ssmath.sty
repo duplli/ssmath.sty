@@ -29,10 +29,10 @@
 
 \RequirePackageWithOptions{xeCJK}
 
-\xeCJKsetup{CJKmath} %%使用此设置可以使得在数学环境中直接输入中文, 而省掉 \text
+\xeCJKsetup{CJKmath} %%使用此设置可以使得在数学环境中直接输入中文, 而省掉 \text, 并不推荐
 
 %\RequirePackage[bookmarks=true]{hyperref}
-%\RequirePackage{amsmath,amssymb}%
+\RequirePackage{amsmath,amssymb}%
 %\RequirePackage{graphicx}
 
 \RequirePackage{tikz}
@@ -40,6 +40,7 @@
 	\usetikzlibrary{patterns} %%使用已经定义好的阴影线  P731 -- 2021
 	\usetikzlibrary{patterns.meta} %%自定义阴影线
 	\tikzset{otmm/.style={x={(-140:0.5cm)},y={(0:1cm)},z={(90:1cm)}}} %%斜二映射法 斜二测画法 oblique two mapping method
+  \tikzset{isom/.style={x={(195:0.9746cm)},y={(-15:0.9746cm)},z={(90:1cm)}}} %%正等测映射法 isometric method, 在此实际使用等二测  dimtric
 	\tikzset{every picture/.style = {>=stealth}} %%每一个图的箭头统一风格
 \RequirePackage{pgfplots}
 
@@ -130,8 +131,16 @@
 
 \let\vector\vec %%使用 vector 保留原始的 vec 定义, 即手写体 (用 def 或者 newcommand 没成功)
 
+\newcommand*\propsubset{\subsetneqq}
+\newcommand*\propsupset{\supsetneqq}
+
+\newcommand*\notsubset{\nsubseteq}
+\newcommand*\notsupset{\nsupseteq}
+
 \AtBeginDocument{
-	\renewcommand\parallel{\mathrel{/\mskip-2.5mu/}}
+  \renewcommand\subset{\subseteq}
+  \renewcommand\supset{\supseteq}
+  \renewcommand\parallel{\mathrel{/\mskip-2.5mu/}}%%/\!\!/
 	
 	\renewcommand*{\vec}[1]{%
 		\IfInteger{#1}{\symbf{#1}}%% 若为数字, 只加粗不倾斜
@@ -140,6 +149,9 @@
 			\symbfit{#1}%
 			\else%
 			\ifnum \lengthforvector=2\vv{#1}\else\vv{#1}\@latex@warning{Please determine the length of string!}\fi\fi}}%%使用 unicode-math 提供的 \symbfit 实现更改数学字体后的粗斜体
+  
+  \newcommand*{\coj}{\wideoverbar}%%使用 unicode-math 提供的 \wideoverbar 实现宽度自由的 bar 和共轭 conjugate
+  \renewcommand*{\bar}{\wideoverbar}%%使用 unicode-math 提供的 \wideoverbar 实现宽度自由的 bar 和共轭 conjugate
 }
 %\renewcommand\parallel{\mathrel{/\mskip-2.5mu/}} %%由于 unicode-math 的符号在 atbegindocument 引入, 因此若要重定义之中的的符号, 得在 \AtBeginDocument 或正文修改修改 谢谢 纸鸢 和 sikouhjw 的指导.
 
@@ -158,24 +170,90 @@
 	\renewcommand\given{\SetSymbol[\delimsize]}\given
 	#2
 }
-\newcommand\set[2][x]{\Set*{#1}{#2}}
+\newcommand\set[2][x]{\ensuremath{\Set*{#1}{#2}}}
 
 \DeclarePairedDelimiter\magn{\lvert}{\rvert} %%magnitude of vector or complex number
 \DeclarePairedDelimiter\abs{\lvert}{\rvert} %%absolute of real number
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 
+\DeclarePairedDelimiter\vecang{\langle}{\rangle}
+
 \newcommand\plane{平面~} %% 方便在立体几何中输入, 在加入了 xeCJKsetup{CJKmath} 后可以去掉 \text, 但为了输入省事, 还是再用 plane
 
-\newcommandx\seq[3][1=x,2=n,3=1,usedefault]{#1_{#3},\dots,#1_{#2}} %%sequence
+\newcommandx\seq[3][1=x,2=n,3=1,usedefault]{\ensuremath{#1_{#3},\dots,#1_{#2}}} %%sequence
 
-\newcommandx\elp[3][1=a^2,2=b^2,3=x,usedefault]{% %%%%定义椭圆标准方程 ellipse
-	\ifx #3x \frac{x^2}{#1} + \frac{y^2}{#2}=1\else\ifx #3y \frac{y^2}{#1} + \frac{x^2}{#2}=1\else ???\@latex@warning{Only use default x or y in third parameter of \elp.}\fi\fi}
+\newcommandx\elp[3][1=a^2,2=b^2,3=x,usedefault]{\ensuremath{% %%%%定义椭圆标准方程 ellipse
+  \ifx #1#2 ???\@latex@error{This is an ellipse, not a circle!}{Please check the first and second optional arguments, they must be inequality in an ellipse.}%
+  \else
+    \ifx #3x%
+      \ifx 1#1%
+        x^2 + \frac{y^2}{#2} = 1
+      \else%
+        \ifx 1#2%
+          \frac{x^2}{#1} + y^2 = 1
+        \else%
+          \frac{x^2}{#1} + \frac{y^2}{#2} = 1
+        \fi
+      \fi
+    \else%
+      \ifx #3y%
+        \ifx 1#1%
+          y^2 + \frac{x^2}{#2} = 1
+        \else%
+          \ifx 1#2%
+            \frac{y^2}{#1} + x^2 = 1
+          \else%
+            \frac{y^2}{#1} + \frac{x^2}{#2} = 1
+          \fi
+        \fi
+      \else ???\@latex@warning{Only use default x or y in third parameter of \elp.}%
+      \fi
+    \fi
+  \fi}%
+  }
 
-\newcommandx\hypb[3][1=a^2,2=b^2,3=x,usedefault]{% %%定义双曲线标准方程 hyperbola
-	\ifx #3x \frac{x^2}{#1} - \frac{y^2}{#2}=1\else\ifx #3y \frac{y^2}{#1} - \frac{x^2}{#2}=1\else ???\@latex@warning{Only use default x or y in third parameter of \hypb.}\fi\fi}
+%\newcommandx\elp[3][1=a^2,2=b^2,3=x,usedefault]{% %%%%定义椭圆标准方程 ellipse
+%	\ifx #3x \frac{x^2}{#1} + \frac{y^2}{#2}=1\else\ifx #3y \frac{y^2}{#1} + \frac{x^2}{#2}=1\else ???\@latex@warning{Only use default x or y in third parameter of \elp.}\fi\fi}
 
-%% 用 TikZ 标记线段AB长度, 需要 calc 库, TikZ leble segment length, require calc library
+\newcommandx\hypb[3][1=a^2,2=b^2,3=x,usedefault]{\ensuremath{% %%定义双曲线标准方程 hyperbola
+  \ifx #3x%
+    \ifx 1#1%
+      \ifx 1#2%
+        x^2 - y^2 = 1
+      \else%
+        x^2 - \frac{y^2}{#2} = 1
+      \fi
+    \else%
+      \ifx 1#2%
+        \frac{x^2}{#1} - y^2 = 1
+      \else%
+        \frac{x^2}{#1} - \frac{y^2}{#2} = 1
+      \fi
+    \fi
+  \else%
+    \ifx #3y%
+      \ifx 1#1%
+        \ifx 1#2%
+          y^2 - x^2 = 1
+        \else%
+          y^2 - \frac{x^2}{#2} = 1
+        \fi
+      \else%
+        \ifx 1#2%
+          \frac{y^2}{#1} - x^2 = 1
+        \else%
+          \frac{y^2}{#1} - \frac{x^2}{#2} = 1
+        \fi
+      \fi
+    \else ???\@latex@warning{Only use default x or y in third parameter of \hypb.}%
+    \fi
+  \fi}}
+
+%\newcommandx\hypb[3][1=a^2,2=b^2,3=x,usedefault]{% %%定义双曲线标准方程 hyperbola
+%	\ifx #3x \frac{x^2}{#1} - \frac{y^2}{#2}=1\else\ifx #3y \frac{y^2}{#1} - \frac{x^2}{#2}=1\else ???\@latex@warning{Only use default x or y in third parameter of \hypb.}\fi\fi}
+
+%% 用 TikZ 标记线段AB长度, 需要 calc 库, TikZ label segment length, require calc library
 %%#1 0.25cm default, #2 A, #3 B, #4 2.5cm (length of segment),  #5 0.2cm shift length, #6 rotate angle from AB not BA 90
 \newcommand\tikzlabseglen[6][0.25cm]{%
 	\coordinate (tempa) at ($ (#2)!{#5}!#6:(#3) $);
@@ -205,6 +283,8 @@
 \newcommand\d{\ifmmode\dif\else\expandafter\daccent\fi}
 %%%%%%%%%通过重定义数学环境中的 \d 使得 \d 在文本中保留原定义, 而在数学环境中为微分算子
 
+\newcommand*{\hyf}{\mathord{\text{-}}}%% 定义数学中的连字符 hyphen /haifn/
+
 \newcommand*{\im}{%  %定义虚数单位 i
 	\mathord{\symup{i}}%
 }
@@ -227,6 +307,10 @@
 
 \newcommand*{\setr}{%   %定义实数集 R, set of real numbers
 	\mathord{\symbf{R}}%
+}
+
+\newcommand*{\seti}{%   %定义纯虚数集 I, set of pure imaginary numbers
+  \mathord{\symbf{I}}%
 }
 
 \newcommand*{\setc}{%   %定义复数集 C, set of complex numbers
